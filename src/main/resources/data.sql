@@ -1,1 +1,2 @@
-INSERT INTO tb_users (ID, NAME, LOGIN, PASSWORD, ROLE) VALUES (1, 'Admin', 'admin', '$2a$10$uwQ8Ij.P8/Dz97lIbZrCD.rifW65YuvzyAbf3FkiLU6M2zz3Ho7GG', 'admin');
+INSERT INTO tb_users (ID, NAME, LOGIN, PASSWORD, ROLE) VALUES (10, 'Admin', 'admin', '$2a$10$uwQ8Ij.P8/Dz97lIbZrCD.rifW65YuvzyAbf3FkiLU6M2zz3Ho7GG', 'admin');
+INSERT INTO tb_users (ID, NAME, LOGIN, PASSWORD, ROLE) VALUES (11, 'User', 'user', '$2a$10$uwQ8Ij.P8/Dz97lIbZrCD.rifW65YuvzyAbf3FkiLU6M2zz3Ho7GG', 'user');
