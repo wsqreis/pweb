@@ -15,6 +15,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/image")
+@CrossOrigin("*")
 public class ImageController {
 
     @Autowired

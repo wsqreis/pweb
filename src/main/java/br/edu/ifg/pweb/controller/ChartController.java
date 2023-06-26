@@ -16,6 +16,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping(value = "/chart")
+@CrossOrigin("*")
 public class ChartController {
 
     @Autowired

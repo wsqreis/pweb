@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/offers")
+@CrossOrigin("*")
 public class OfferController {
 
     @Autowired

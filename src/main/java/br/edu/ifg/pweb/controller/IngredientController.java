@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/ingredients")
+@CrossOrigin("*")
 public class IngredientController {
 
     @Autowired
