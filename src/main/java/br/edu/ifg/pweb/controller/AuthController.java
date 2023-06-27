@@ -3,6 +3,7 @@ package br.edu.ifg.pweb.controller;
 import br.edu.ifg.pweb.dto.Login;
 import br.edu.ifg.pweb.entity.User;
 import br.edu.ifg.pweb.service.TokenService;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin("*")
+@CrossOrigin("/login")
 public class AuthController {
 
     @Autowired
@@ -35,7 +36,6 @@ public class AuthController {
 
         var user = (User) authenticate.getPrincipal();
 
-        return tokenService.gerarToken(user);
-
+        return new Gson().toJson(tokenService.gerarToken(user));
     }
 }
