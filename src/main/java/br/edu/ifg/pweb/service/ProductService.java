@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,20 +27,8 @@ public class ProductService {
     @Autowired
     private LogService logService;
 
-    @Autowired
-    private ImageService imageService;
-
     @Transactional(readOnly = true)
-    public List<ProductDTO> findAll(UserDetails userDetails){
-        List<br.edu.ifg.pweb.entity.Product> list = productRepository.findAll();
-        logService.logAction("Searched all products", userDetails.getUsername(), LocalDateTime.now());
-        return list.stream()
-                .map(x -> new ProductDTO(x))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional(readOnly = true)
-    public List<ProductDTO> findByCategory(String name, UserDetails userDetails){
+    public List<ProductDTO> findByCategory(String name, UserDetails userDetails) {
         try {
             Category category = categoryRepository.findByName(name);
             List<Product> list = productRepository.findByCategory(category);
@@ -47,13 +36,25 @@ public class ProductService {
             return list.stream()
                     .map(x -> new ProductDTO(x))
                     .collect(Collectors.toList());
-        }catch (Exception e){
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDTO findById(Long id, UserDetails userDetails) {
+        Optional<Product> obj = productRepository.findById(id);
+        if (obj.isPresent()) {
+            Product entity = obj.get();
+            logService.logAction("Searched product " + id, userDetails.getUsername(), LocalDateTime.now());
+            return new ProductDTO(entity);
+        } else {
             return null;
         }
     }
 
     @Transactional
-    public ProductDTO insert(ProductDTO dto, String name, UserDetails userDetails){
+    public ProductDTO insert(ProductDTO dto, String name, UserDetails userDetails) {
         try {
             Product entity = new Product(dto);
             Category category = categoryRepository.findByName(name);
@@ -61,7 +62,7 @@ public class ProductService {
             entity = productRepository.save(entity);
             logService.logAction("Created new product", userDetails.getUsername(), LocalDateTime.now());
             return new ProductDTO(entity);
-        }catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
     }
@@ -70,7 +71,9 @@ public class ProductService {
     public ProductDTO update(Long id, ProductDTO dto, UserDetails userDetails) {
         Product entity = productRepository.findById(id).orElse(null);
         if (entity != null) {
-            entity = productRepository.save(new Product(dto));
+            Product toSave = new Product(dto);
+            toSave.setCategory(entity.getCategory());
+            entity = productRepository.save(toSave);
             logService.logAction("Updated product " + id, userDetails.getUsername(), LocalDateTime.now());
             return new ProductDTO(entity);
         }else {
@@ -83,7 +86,7 @@ public class ProductService {
             productRepository.deleteById(id);
             logService.logAction("Deleted product " + id, userDetails.getUsername(), LocalDateTime.now());
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }

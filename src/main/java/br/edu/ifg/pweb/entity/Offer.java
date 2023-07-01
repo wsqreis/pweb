@@ -17,7 +17,7 @@ public class Offer {
     private Double price;
 
     private String details;
-
+    @Column(length = 399999999)
     private String imageName;
 
     public Offer() {

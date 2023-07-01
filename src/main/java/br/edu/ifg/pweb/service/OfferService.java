@@ -22,9 +22,6 @@ public class OfferService {
     @Autowired
     private LogService logService;
 
-    @Autowired
-    private ImageService imageService;
-
     @Transactional(readOnly = true)
     public List<OfferDTO> findAll(UserDetails userDetails){
         List<Offer> list = offerRepository.findAll();

@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +21,6 @@ public class CategoryService {
 
     @Autowired
     private LogService logService;
-
-    @Autowired
-    private ImageService imageService;
 
     @Transactional(readOnly = true)
     public List<CategoryDTO> findAll(UserDetails userDetails){
@@ -71,10 +67,6 @@ public class CategoryService {
     public boolean delete(Long id, UserDetails userDetails) {
         try {
             Optional<Category> obj = categoryRepository.findById(id);
-            if (obj.isPresent()){
-                Category entity = obj.orElse(null);
-                imageService.removeImage(entity.getImageName(), userDetails);
-            }
             categoryRepository.deleteById(id);
             logService.logAction("Deleted category " + id, userDetails.getUsername(), LocalDateTime.now());
             return true;

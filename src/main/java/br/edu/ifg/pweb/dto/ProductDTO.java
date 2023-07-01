@@ -1,7 +1,5 @@
 package br.edu.ifg.pweb.dto;
 
-import br.edu.ifg.pweb.entity.Category;
-import br.edu.ifg.pweb.entity.Chart;
 import br.edu.ifg.pweb.entity.Product;
 
 public class ProductDTO {
@@ -15,21 +13,24 @@ public class ProductDTO {
 
     private String imageName;
 
+    private String ingredients;
     public ProductDTO() {
     }
 
-    public ProductDTO(Long id, String name, Double price, String imageName) {
+    public ProductDTO(Long id, String name, Double price, String imageName, String ingredients) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.imageName = imageName;
+        this.ingredients = ingredients;
     }
 
-    public ProductDTO(Product product){
+    public ProductDTO(Product product) {
         setId(product.getId());
         setName(product.getName());
         setPrice(product.getPrice());
         setImageName(product.getImageName());
+        setIngredients(product.getIngredients());
     }
 
     public Long getId() {
@@ -62,5 +63,13 @@ public class ProductDTO {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public String getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(String ingredients) {
+        this.ingredients = ingredients;
     }
 }

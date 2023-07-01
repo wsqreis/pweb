@@ -7,16 +7,19 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 
 @Service
 public class TokenService {
     public String gerarToken(User user) {
+        ArrayList<String> roles = new ArrayList<>();
+        roles.add(user.getRole());
         return JWT.create()
                 .withIssuer("Produtos")
                 .withSubject(user.getUsername())
                 .withClaim("id", user.getId())
                 .withClaim("name", user.getName())
-                .withClaim("role", user.getRole())
+                .withClaim("role", roles)
                 .withExpiresAt(LocalDateTime.now()
                         .plusMinutes(30)
                         .toInstant(ZoneOffset.of("-03:00"))

@@ -12,9 +12,9 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
+    @Column(unique = true)
     private String name;
-
+    @Column(length = 399999999, unique = true)
     private String imageName;
 
     @OneToMany(mappedBy = "category")
@@ -29,7 +29,7 @@ public class Category {
         this.imageName = imageName;
     }
 
-    public Category(CategoryDTO dto){
+    public Category(CategoryDTO dto) {
         this.id = dto.getId();
         this.name = dto.getName();
         this.imageName = dto.getImageName();
