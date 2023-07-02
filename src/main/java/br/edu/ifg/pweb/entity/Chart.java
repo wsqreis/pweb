@@ -13,18 +13,10 @@ public class Chart {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @ManyToMany
-    @JoinTable(
-            name = "products_list",
-            joinColumns = @JoinColumn(name = "chart_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @OneToMany(mappedBy = "chart")
     private List<Product> products;
 
-    @ManyToMany
-    @JoinTable(
-            name = "offers_list",
-            joinColumns = @JoinColumn(name = "chart_id"),
-            inverseJoinColumns = @JoinColumn(name = "offer_id"))
+    @OneToMany(mappedBy = "chart")
     private List<Offer> offers;
 
     @OneToOne(mappedBy = "chart")

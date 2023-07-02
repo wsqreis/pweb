@@ -20,7 +20,8 @@ public class Offer {
     @Column(length = 399999999)
     private String imageName;
 
-    @ManyToMany(mappedBy = "offers")
+    @ManyToOne
+    @JoinColumn(name = "chart_id")
     private Chart chart;
 
     public Offer() {
