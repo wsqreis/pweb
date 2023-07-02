@@ -20,15 +20,19 @@ public class Offer {
     @Column(length = 399999999)
     private String imageName;
 
+    @ManyToMany(mappedBy = "offers")
+    private Chart chart;
+
     public Offer() {
     }
 
-    public Offer(Long id, String name, Double price, String details, String imageName) {
+    public Offer(Long id, String name, Double price, String details, String imageName, Chart chart) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.details = details;
         this.imageName = imageName;
+        this.chart = chart;
     }
 
     public Offer(OfferDTO offerDTO){
@@ -77,5 +81,13 @@ public class Offer {
 
     public void setImageName(String imageName) {
         this.imageName = imageName;
+    }
+
+    public Chart getChart() {
+        return chart;
+    }
+
+    public void setChart(Chart chart) {
+        this.chart = chart;
     }
 }

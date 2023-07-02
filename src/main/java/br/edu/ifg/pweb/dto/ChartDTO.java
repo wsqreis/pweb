@@ -1,8 +1,10 @@
 package br.edu.ifg.pweb.dto;
 
 import br.edu.ifg.pweb.entity.Chart;
+import br.edu.ifg.pweb.entity.Offer;
 import br.edu.ifg.pweb.entity.Product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChartDTO {
@@ -10,19 +12,31 @@ public class ChartDTO {
 
     private Long id;
 
-    private List<Product> products;
+    private List<ChartItemDTO> list = new ArrayList<>();
+
+    private double total = 0.0;
 
     public ChartDTO() {
     }
 
-    public ChartDTO(Long id, List<Product> products) {
+    public ChartDTO(Long id, List<ChartItemDTO> list, double total) {
         this.id = id;
-        this.products = products;
+        this.list = list;
+        this.total = total;
     }
 
     public ChartDTO(Chart chart){
         setId(chart.getId());
-        setProducts(chart.getProducts());
+
+        for (Product product : chart.getProducts()) {
+            total += product.getPrice();
+            list.add(new ChartItemDTO(product));
+        }
+
+        for (Offer offer : chart.getOffers()) {
+            total += offer.getPrice();
+            list.add(new ChartItemDTO(offer));
+        }
     }
 
     public Long getId() {
@@ -33,11 +47,15 @@ public class ChartDTO {
         this.id = id;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<ChartItemDTO> getList() {
+        return list;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
     }
 }

@@ -13,8 +13,19 @@ public class Chart {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @OneToMany(mappedBy = "chart")
+    @ManyToMany
+    @JoinTable(
+            name = "products_list",
+            joinColumns = @JoinColumn(name = "chart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
+
+    @ManyToMany
+    @JoinTable(
+            name = "offers_list",
+            joinColumns = @JoinColumn(name = "chart_id"),
+            inverseJoinColumns = @JoinColumn(name = "offer_id"))
+    private List<Offer> offers;
 
     @OneToOne(mappedBy = "chart")
     private User user;
@@ -22,9 +33,10 @@ public class Chart {
     public Chart() {
     }
 
-    public Chart(Long id, List<Product> products, User user) {
+    public Chart(Long id, List<Product> products, List<Offer> offers, User user) {
         this.id = id;
         this.products = products;
+        this.offers = offers;
         this.user = user;
     }
 
@@ -42,6 +54,14 @@ public class Chart {
 
     public List<Product> getProducts() {
         return products;
+    }
+
+    public List<Offer> getOffers() {
+        return offers;
+    }
+
+    public void setOffers(List<Offer> offers) {
+        this.offers = offers;
     }
 
     public User getUser() {

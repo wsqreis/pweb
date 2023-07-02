@@ -24,8 +24,7 @@ public class Product {
 
    private String ingredients;
 
-    @ManyToOne
-    @JoinColumn(name = "chart_id")
+    @ManyToMany(mappedBy = "products")
     private Chart chart;
 
     @Column(length = 399999999)

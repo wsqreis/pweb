@@ -1,20 +1,18 @@
 package br.edu.ifg.pweb.service;
 
-import br.edu.ifg.pweb.dto.ChartDTO;
-import br.edu.ifg.pweb.dto.ProductDTO;
-import br.edu.ifg.pweb.entity.Chart;
-import br.edu.ifg.pweb.entity.Product;
-import br.edu.ifg.pweb.entity.User;
-import br.edu.ifg.pweb.repository.ChartRepository;
-import br.edu.ifg.pweb.repository.ProductRepository;
-import br.edu.ifg.pweb.repository.UserRepository;
+import br.edu.ifg.pweb.dto.*;
+import br.edu.ifg.pweb.entity.*;
+import br.edu.ifg.pweb.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ChartService {
@@ -27,6 +25,11 @@ public class ChartService {
 
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private OfferRepository offerRepository;
+
+    @Autowired
+    private SaleRepository saleRepository;
 
     @Autowired
     private LogService logService;
@@ -61,5 +64,47 @@ public class ChartService {
         }else {
             return false;
         }
+    }
+
+    @Transactional
+    public ChartDTO insertOffer(OfferDTO dto, UserDetails userDetails){
+        User user = userRepository.findByLogin(userDetails.getUsername());
+        Chart entity = user.getChart();
+        entity.getOffers().add(new Offer(dto));
+        entity = chartRepository.save(entity);
+        logService.logAction("Added " + dto.getName() + " to chart", userDetails.getUsername(), LocalDateTime.now());
+        return new ChartDTO(entity);
+    }
+
+    public boolean removeOffer(Long id, UserDetails userDetails) {
+        Optional<Offer> obj = offerRepository.findById(id);
+        if (obj.isPresent()) {
+            Offer offer = obj.get();
+            User user = userRepository.findByLogin(userDetails.getUsername());
+            Chart entity = user.getChart();
+            entity.getOffers().remove(offer);
+            entity = chartRepository.save(entity);
+            logService.logAction("Removed " + offer.getName() + " from chart", userDetails.getUsername(), LocalDateTime.now());
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    public ChartDTO checkout(UserDetails userDetails){
+        User user = userRepository.findByLogin(userDetails.getUsername());
+        Chart entity = user.getChart();
+        ChartDTO dto = new ChartDTO(entity);
+
+        Sale sale = new Sale();
+        sale.setUsername(user.getUsername());
+        sale.setTotal(dto.getTotal());
+        sale = saleRepository.save(sale);
+
+        entity.getProducts().removeAll(entity.getProducts());
+        entity.getOffers().removeAll(entity.getOffers());
+        entity = chartRepository.save(entity);
+
+        return new ChartDTO(entity);
     }
 }

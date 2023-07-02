@@ -13,8 +13,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
-@RestController
-@RequestMapping(value = "/categories")
+    @RestController
+    @RequestMapping(value = "/categories")
     @CrossOrigin("*")
     public class CategoryController {
 
