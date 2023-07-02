@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 @Service
 public class TokenService {
-    public String gerarToken(User user) {
+    public String createToken(User user) {
         ArrayList<String> roles = new ArrayList<>();
         roles.add(user.getRole());
         return JWT.create()
@@ -25,7 +25,6 @@ public class TokenService {
                         .toInstant(ZoneOffset.of("-03:00"))
                 ).sign(Algorithm.HMAC256("secreta"));
     }
-
 
     public String getSubject(String token) {
         return JWT.require(Algorithm.HMAC256("secreta"))

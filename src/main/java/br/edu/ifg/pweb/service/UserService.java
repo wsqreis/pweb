@@ -1,9 +1,9 @@
 package br.edu.ifg.pweb.service;
 
 import br.edu.ifg.pweb.dto.UserDTO;
-import br.edu.ifg.pweb.entity.Chart;
+import br.edu.ifg.pweb.entity.Cart;
 import br.edu.ifg.pweb.entity.User;
-import br.edu.ifg.pweb.repository.ChartRepository;
+import br.edu.ifg.pweb.repository.CartRepository;
 import br.edu.ifg.pweb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +18,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private ChartRepository chartRepository;
+    private CartRepository cartRepository;
     @Autowired
     private LogService logService;
 
@@ -28,14 +28,22 @@ public class UserService {
         logService.logAction("Checked user information", user.getUsername(), LocalDateTime.now());
         return new UserDTO(user);
     }
+    public boolean userExists(UserDTO userDTO){
+        try {
+            User user = userRepository.findByLogin(userDTO.getLogin());
+            return user != null;
+        }catch (Exception e){
+            return false;
+        }
+    }
 
     @Transactional
     public UserDTO insertUser(UserDTO dto){
         User entity = new User(dto);
         entity.setRole("user");
-        Chart chart = new Chart();
-        chart = chartRepository.save(chart);
-        entity.setChart(chart);
+        Cart cart = new Cart();
+        cart = cartRepository.save(cart);
+        entity.setChart(cart);
         entity = userRepository.save(entity);
         logService.logAction("User registered", entity.getUsername(), LocalDateTime.now());
 
@@ -46,9 +54,9 @@ public class UserService {
     public UserDTO insertAdmin(UserDTO dto, UserDetails userDetails){
         User entity = new User(dto);
         entity.setRole("admin");
-        Chart chart = new Chart();
-        chart = chartRepository.save(chart);
-        entity.setChart(chart);
+        Cart cart = new Cart();
+        cart = cartRepository.save(cart);
+        entity.setChart(cart);
         entity = userRepository.save(entity);
         logService.logAction("Admin " + entity.getUsername() + " registered", userDetails.getUsername(), LocalDateTime.now());
 

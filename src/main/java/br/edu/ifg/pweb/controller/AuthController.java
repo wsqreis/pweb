@@ -35,7 +35,7 @@ public class AuthController {
                 .authenticate(usernamePasswordAuthenticationToken);
 
         var user = (User) authenticate.getPrincipal();
-        String token =  tokenService.gerarToken(user);
+        String token =  tokenService.createToken(user);
 
         return new Gson().toJson(token);
     }

@@ -3,13 +3,15 @@ package br.edu.ifg.pweb.entity;
 import br.edu.ifg.pweb.dto.OfferDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_offers")
 public class Offer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -20,20 +22,18 @@ public class Offer {
     @Column(length = 399999999)
     private String imageName;
 
-    @ManyToOne
-    @JoinColumn(name = "chart_id")
-    private Chart chart;
+    @ManyToMany(mappedBy = "offers")
+    private final List<Cart> carts = new ArrayList<>();
 
     public Offer() {
     }
 
-    public Offer(Long id, String name, Double price, String details, String imageName, Chart chart) {
+    public Offer(Long id, String name, Double price, String details, String imageName) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.details = details;
         this.imageName = imageName;
-        this.chart = chart;
     }
 
     public Offer(OfferDTO offerDTO){
@@ -84,11 +84,7 @@ public class Offer {
         this.imageName = imageName;
     }
 
-    public Chart getChart() {
-        return chart;
-    }
-
-    public void setChart(Chart chart) {
-        this.chart = chart;
+    public List<Cart> getCharts() {
+        return carts;
     }
 }

@@ -1,10 +1,9 @@
 package br.edu.ifg.pweb.controller;
 
-import br.edu.ifg.pweb.dto.CategoryDTO;
-import br.edu.ifg.pweb.dto.ChartDTO;
+import br.edu.ifg.pweb.dto.CartDTO;
 import br.edu.ifg.pweb.dto.OfferDTO;
 import br.edu.ifg.pweb.dto.ProductDTO;
-import br.edu.ifg.pweb.service.ChartService;
+import br.edu.ifg.pweb.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,17 +15,17 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping(value = "/chart")
+@RequestMapping(value = "/cart")
 @CrossOrigin("*")
-public class ChartController {
+public class CartController {
 
     @Autowired
-    private ChartService chartService;
+    private CartService cartService;
 
     @GetMapping
     @PreAuthorize("hasAnyRole('user', 'admin')")
-    public ResponseEntity<ChartDTO> getChart(@AuthenticationPrincipal UserDetails userDetails){
-        ChartDTO dto = chartService.getChart(userDetails);
+    public ResponseEntity<CartDTO> getChart(@AuthenticationPrincipal UserDetails userDetails){
+        CartDTO dto = cartService.getChart(userDetails);
         if (dto != null) {
             return ResponseEntity.ok().body(dto);
         }else {
@@ -36,13 +35,13 @@ public class ChartController {
 
     @PostMapping(value = "/product")
     @PreAuthorize("hasAnyRole('user', 'admin')")
-    public ResponseEntity<ChartDTO> insertProduct(@RequestBody ProductDTO productDTO, @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<CartDTO> insertProduct(@RequestBody ProductDTO productDTO, @AuthenticationPrincipal UserDetails userDetails){
         try {
-            ChartDTO dto = chartService.insertProduct(productDTO, userDetails);
+            CartDTO dto = cartService.insertProduct(productDTO, userDetails);
 
             URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(dto.getId()).toUri();
+                    .buildAndExpand(productDTO.getId()).toUri();
 
             return ResponseEntity.created(uri).body(dto);
         }catch (Exception e){
@@ -53,7 +52,7 @@ public class ChartController {
     @DeleteMapping(value = "/product/{id}")
     @PreAuthorize("hasAnyRole('user', 'admin')")
     public ResponseEntity<String> removeProduct(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
-        if (chartService.removeProduct(id, userDetails)){
+        if (cartService.removeProduct(id, userDetails)){
             return ResponseEntity.noContent().build();
         }else {
             return ResponseEntity.notFound().build();
@@ -62,13 +61,13 @@ public class ChartController {
 
     @PostMapping(value = "/offer")
     @PreAuthorize("hasAnyRole('user', 'admin')")
-    public ResponseEntity<ChartDTO> insertOffer(@RequestBody OfferDTO offerDTO, @AuthenticationPrincipal UserDetails userDetails){
+    public ResponseEntity<CartDTO> insertOffer(@RequestBody OfferDTO offerDTO, @AuthenticationPrincipal UserDetails userDetails){
         try {
-            ChartDTO dto = chartService.insertOffer(offerDTO, userDetails);
+            CartDTO dto = cartService.insertOffer(offerDTO, userDetails);
 
             URI uri = ServletUriComponentsBuilder
                     .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(dto.getId()).toUri();
+                    .buildAndExpand(offerDTO.getId()).toUri();
 
             return ResponseEntity.created(uri).body(dto);
         }catch (Exception e){
@@ -79,7 +78,7 @@ public class ChartController {
     @DeleteMapping(value = "/offer/{id}")
     @PreAuthorize("hasAnyRole('user', 'admin')")
     public ResponseEntity<String> removeOffer(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails){
-        if (chartService.removeOffer(id, userDetails)){
+        if (cartService.removeOffer(id, userDetails)){
             return ResponseEntity.noContent().build();
         }else {
             return ResponseEntity.notFound().build();
@@ -88,8 +87,8 @@ public class ChartController {
 
     @GetMapping(value = "/checkout")
     @PreAuthorize("hasAnyRole('user', 'admin')")
-    public ResponseEntity<ChartDTO> checkout(@AuthenticationPrincipal UserDetails userDetails){
-        ChartDTO dto = chartService.checkout(userDetails);
+    public ResponseEntity<CartDTO> checkout(@AuthenticationPrincipal UserDetails userDetails){
+        CartDTO dto = cartService.checkout(userDetails);
         if (dto != null) {
             return ResponseEntity.ok().body(dto);
         }else {

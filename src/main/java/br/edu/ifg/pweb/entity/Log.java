@@ -1,13 +1,11 @@
 package br.edu.ifg.pweb.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "tb_logs")
 public class Log {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +18,7 @@ public class Log {
     public Log() {
     }
 
-    public Log(Long id, String action, String user, LocalDateTime time) {
+    public Log(Long id, String action, String username, LocalDateTime time) {
         this.id = id;
         this.action = action;
         this.username = username;

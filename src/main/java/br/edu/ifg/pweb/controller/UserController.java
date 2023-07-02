@@ -3,6 +3,7 @@ package br.edu.ifg.pweb.controller;
 import br.edu.ifg.pweb.dto.UserDTO;
 import br.edu.ifg.pweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -35,14 +36,18 @@ public class UserController {
     @PreAuthorize("permitAll()")
     public ResponseEntity<UserDTO> insertUser(@RequestBody UserDTO dto){
         try {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-            dto = userService.insertUser(dto);
+            if (userService.userExists(dto)){
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }else {
+                dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+                dto = userService.insertUser(dto);
 
-            URI uri = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(dto.getId()).toUri();
+                URI uri = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{id}")
+                        .buildAndExpand(dto.getId()).toUri();
 
-            return ResponseEntity.created(uri).body(dto);
+                return ResponseEntity.created(uri).body(dto);
+            }
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }
@@ -52,14 +57,18 @@ public class UserController {
     @PreAuthorize("hasRole('admin')")
     public ResponseEntity<UserDTO> insertAdmin(@RequestBody UserDTO dto, @AuthenticationPrincipal UserDetails userDetails){
         try {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
-            dto = userService.insertAdmin(dto, userDetails);
+            if (userService.userExists(dto)){
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }else {
+                dto.setPassword(passwordEncoder.encode(dto.getPassword()));
+                dto = userService.insertAdmin(dto, userDetails);
 
-            URI uri = ServletUriComponentsBuilder
-                    .fromCurrentRequest().path("/{id}")
-                    .buildAndExpand(dto.getId()).toUri();
+                URI uri = ServletUriComponentsBuilder
+                        .fromCurrentRequest().path("/{id}")
+                        .buildAndExpand(dto.getId()).toUri();
 
-            return ResponseEntity.created(uri).body(dto);
+                return ResponseEntity.created(uri).body(dto);
+            }
         }catch (Exception e){
             return ResponseEntity.badRequest().build();
         }

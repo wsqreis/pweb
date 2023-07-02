@@ -7,7 +7,7 @@ import java.util.List;
 
 public class SalesBookDTO {
 
-    private final List<SaleDTO> salesDTOS = new ArrayList<>();
+    private final List<SaleDTO> sales = new ArrayList<>();
 
     private double total = 0.0;
 
@@ -16,13 +16,13 @@ public class SalesBookDTO {
 
     public SalesBookDTO(List<Sale> sales){
         for (Sale sale : sales){
-            salesDTOS.add(new SaleDTO(sale));
+            this.sales.add(new SaleDTO(sale));
             total += sale.getTotal();
         }
     }
 
-    public List<SaleDTO> getSalesDTOS() {
-        return salesDTOS;
+    public List<SaleDTO> getSales() {
+        return sales;
     }
 
     public double getTotal() {

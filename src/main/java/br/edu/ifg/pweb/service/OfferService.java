@@ -47,7 +47,7 @@ public class OfferService {
     public OfferDTO insert(OfferDTO dto, UserDetails userDetails){
         Offer entity = new Offer(dto);
         entity = offerRepository.save(entity);
-        logService.logAction("Created new ingredient", userDetails.getUsername(), LocalDateTime.now());
+        logService.logAction("Created new offer", userDetails.getUsername(), LocalDateTime.now());
         return new OfferDTO(entity);
     }
 

@@ -3,7 +3,7 @@ package br.edu.ifg.pweb.dto;
 import br.edu.ifg.pweb.entity.Offer;
 import br.edu.ifg.pweb.entity.Product;
 
-public class ChartItemDTO {
+public class CartItemDTO {
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -18,10 +18,10 @@ public class ChartItemDTO {
 
     private String ingredients;
 
-    public ChartItemDTO() {
+    public CartItemDTO() {
     }
 
-    public ChartItemDTO(Long id, String name, Double price, String details, String imageName, String ingredients) {
+    public CartItemDTO(Long id, String name, Double price, String details, String imageName, String ingredients) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -30,7 +30,7 @@ public class ChartItemDTO {
         this.ingredients = ingredients;
     }
 
-    public ChartItemDTO(Product product){
+    public CartItemDTO(Product product){
         setId(product.getId());
         setName(product.getName());
         setPrice(product.getPrice());
@@ -38,7 +38,7 @@ public class ChartItemDTO {
         setIngredients(product.getIngredients());
     }
 
-    public ChartItemDTO(Offer offer){
+    public CartItemDTO(Offer offer){
         setId(offer.getId());
         setName(offer.getName());
         setPrice(offer.getPrice());

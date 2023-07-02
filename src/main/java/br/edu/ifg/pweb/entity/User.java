@@ -16,7 +16,7 @@ import java.util.List;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -27,7 +27,7 @@ public class User implements UserDetails {
     private String role;
 
     @OneToOne
-    private Chart chart;
+    private Cart cart;
 
     public User() {}
 
@@ -100,11 +100,11 @@ public class User implements UserDetails {
         return true;
     }
 
-    public Chart getChart() {
-        return chart;
+    public Cart getChart() {
+        return cart;
     }
 
-    public void setChart(Chart chart) {
-        this.chart = chart;
+    public void setChart(Cart cart) {
+        this.cart = cart;
     }
 }

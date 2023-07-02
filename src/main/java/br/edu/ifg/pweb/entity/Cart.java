@@ -1,39 +1,39 @@
 package br.edu.ifg.pweb.entity;
 
-import br.edu.ifg.pweb.dto.ChartDTO;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "tb_charts")
-public class Chart {
+@Table(name = "tb_carts")
+public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "chart")
+    @ManyToMany
+    @JoinTable(name = "cart_product",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
 
-    @OneToMany(mappedBy = "chart")
+    @ManyToMany
+    @JoinTable(name = "cart_offer",
+            joinColumns = @JoinColumn(name = "cart_id"),
+            inverseJoinColumns = @JoinColumn(name = "offer_id"))
     private List<Offer> offers;
 
-    @OneToOne(mappedBy = "chart")
+    @OneToOne(mappedBy = "cart")
     private User user;
 
-    public Chart() {
+    public Cart() {
     }
 
-    public Chart(Long id, List<Product> products, List<Offer> offers, User user) {
+    public Cart(Long id, List<Product> products, List<Offer> offers, User user) {
         this.id = id;
         this.products = products;
         this.offers = offers;
         this.user = user;
-    }
-
-    public Chart(ChartDTO chartDTO){
-        setId(chartDTO.getId());
     }
 
     public Long getId() {
@@ -50,10 +50,6 @@ public class Chart {
 
     public List<Offer> getOffers() {
         return offers;
-    }
-
-    public void setOffers(List<Offer> offers) {
-        this.offers = offers;
     }
 
     public User getUser() {

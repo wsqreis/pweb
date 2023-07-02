@@ -3,13 +3,15 @@ package br.edu.ifg.pweb.entity;
 import br.edu.ifg.pweb.dto.ProductDTO;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "product")
 @Table(name = "tb_products")
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -24,9 +26,8 @@ public class Product {
 
    private String ingredients;
 
-    @ManyToOne
-    @JoinColumn(name = "chart_id")
-    private Chart chart;
+    @ManyToMany(mappedBy = "products")
+    private final List<Cart> carts = new ArrayList<>();;
 
     @Column(length = 399999999)
     private String imageName;
@@ -34,12 +35,13 @@ public class Product {
     public Product(){
     }
 
-    public Product(Long id, String name, Double price, Category category, Chart chart, String ingredients) {
+    public Product(Long id, String name, Double price, Category category, String ingredients, String imageName) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.category = category;
-        this.chart = chart;
+        this.ingredients = ingredients;
+        this.imageName = imageName;
     }
 
     public Product(ProductDTO productDTO){
@@ -90,12 +92,8 @@ public class Product {
         this.ingredients = ingredients;
     }
 
-    public Chart getChart() {
-        return chart;
-    }
-
-    public void setChart(Chart chart) {
-        this.chart = chart;
+    public List<Cart> getCharts() {
+        return carts;
     }
 
     public String getImageName() {

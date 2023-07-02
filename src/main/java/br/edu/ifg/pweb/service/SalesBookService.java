@@ -24,7 +24,7 @@ public class SalesBookService {
     @Transactional(readOnly = true)
     public SalesBookDTO getSalesBook(UserDetails userDetails){
         List<Sale> list = saleRepository.findAll();
-        logService.logAction("Retrieved salesbook", userDetails.getUsername(), LocalDateTime.now());
+        logService.logAction("Visited sales book", userDetails.getUsername(), LocalDateTime.now());
         return new SalesBookDTO(list);
     }
 }
